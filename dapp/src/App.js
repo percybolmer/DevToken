@@ -65,6 +65,7 @@ function App() {
     window.web3.requestAccounts()
     .then((result) => {
       // Whenever the user accepts this will trigger
+      console.log("Accounts: ", accounts);
       setAccounts(result);
     })
     .catch((error) => {
@@ -103,7 +104,7 @@ function App() {
   // getContractAddress returns the address of the contract
   // hardcoded :) 
   function getContractAddress() {
-    return "0xaD183414719d49Fc3F8Fb0490662C4d484972d86";
+    return "0x083863013A6B34a4a265Eb6fF696daF35071C48e";
   }
 
   async function connectToSelectedNetwork() {
@@ -150,9 +151,10 @@ function App() {
   function stake() {
     // When we trigger Transactions we should use send instead of call
     // We should also calculate the GAS cost so we can apply the correct amount of gas
-    devToken.methods.stake(1000).estimateGas()
+
+    devToken.methods.stake(1000).estimateGas({from: accounts[0]})
       .then((gas) => {
-        // We now have the gas amount, we can now send the transaction
+        // We now have the gas amount, we can now send the transactions
         devToken.methods.stake(1000).send({
           from: accounts[0],
           gas: gas
@@ -170,7 +172,7 @@ function App() {
         <p> Welcome to your DAPP</p>
         <p>The total supply is {totalSupply}</p>
         <p>Account balance: {accountBalance}</p>
-
+        <p>Account: {accounts[0]}</p>
         <button onClick={stake}><p>Stake</p></button>
       </header>
 
